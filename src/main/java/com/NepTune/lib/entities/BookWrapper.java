@@ -1,5 +1,7 @@
 package com.NepTune.lib.entities;
 
+import com.NepTune.lib.constants.ConstantValues;
+
 public class BookWrapper {
 	
 	private String BookTitle;
@@ -7,11 +9,12 @@ public class BookWrapper {
 	
 	public BookWrapper()
 	{
-		super();
+		this(ConstantValues.UNDEFINED_BOOK_ISSUED_TITLE , ConstantValues.UNDEFINED_BOOK_ISSUED_ISBN_NUMBER);	
 	}
 	
 	public BookWrapper(String bookTitle , String bookISBN_Number)
 	{
+		super();
 		this.BookTitle = bookTitle;
 		this.BookISBN_Number = bookISBN_Number;
 	}

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.NepTune.lib.entities.Book;
 import com.NepTune.lib.entities.BookWrapper;
 import com.NepTune.lib.repositories.BookRepository;
+import com.NepTune.lib.constants.ConstantValues;
 
 @Service
 public class BookService {
@@ -84,31 +85,71 @@ public class BookService {
 		}
 	}
 
-	public ResponseEntity<List<BookWrapper>> getBookWrappersByTitle(String title) {
+	public ResponseEntity<BookWrapper> getBookWrappersByTitle(String title) {
 		// TODO Auto-generated method stub
 		
-		ResponseEntity<List<BookWrapper>> result = null;
+		ResponseEntity<BookWrapper> result = null;
 		
 		try
 		{
 			List<Book>books = bookRepository.findByTitle(title);
-			List<BookWrapper>bookWrappers = new ArrayList();
+			
+			BookWrapper bookWrapper = null;
 			
 			for(Book book : books)
 			{
-				BookWrapper bookWrapper = new BookWrapper(book.getTitle() , book.getISBN_NUMBER());
-				bookWrappers.add(bookWrapper);
+				if(book.getIsIssued().equals(ConstantValues.BOOK_NOT_ISSUED))
+				{
+					bookWrapper = new BookWrapper(book.getTitle() , book.getISBN_NUMBER());
+					book.setIsIssued(ConstantValues.BOOK_ISSUED);
+					bookRepository.save(book);
+					break;
+				}
 			}
 			
-			result = new ResponseEntity<>(bookWrappers, HttpStatus.OK);
+			if(bookWrapper == null)
+			{
+				bookWrapper = new BookWrapper();
+			}
+			
+			result = new ResponseEntity<>(bookWrapper, HttpStatus.OK);
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			result = new ResponseEntity<>(new ArrayList() , HttpStatus.BAD_REQUEST);
+			result = new ResponseEntity<>(null , HttpStatus.BAD_REQUEST);
 		}
 		
 		return result;
 		
+	}
+
+	public ResponseEntity<String> returnBookBasedOnISBN_NUMBER(String iSBN_Number) {
+		// TODO Auto-generated method stub
+		// 978-0-7434-1899
+		ResponseEntity<String> result = null;
+		
+		try
+		{
+			List<Book>books = bookRepository.findAll();
+			
+			for(Book book : books)
+			{
+				if(book.getISBN_NUMBER().equals(iSBN_Number))
+				{
+					book.setIsIssued(ConstantValues.BOOK_NOT_ISSUED);
+					bookRepository.save(book);
+					break;
+				}
+			}
+			
+			result = new ResponseEntity<>(ConstantValues.BOOK_RETURNED_MESSAGE , HttpStatus.OK);
+		}
+		catch(Exception e)
+		{
+			result = new ResponseEntity<>(ConstantValues.SOME_ERROR , HttpStatus.BAD_GATEWAY);
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

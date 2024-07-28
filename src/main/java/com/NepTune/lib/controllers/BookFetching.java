@@ -30,10 +30,16 @@ public class BookFetching {
 		return bookService.getAllBooks();
 	}
 	
-	@GetMapping("/title/{title}")
-	public ResponseEntity<List<BookWrapper>>getBookWrappersBasedOnTitle(@PathVariable("title") String title)
+	@PostMapping("/title/{title}")
+	public ResponseEntity<BookWrapper>getBookWrappersBasedOnTitle(@PathVariable("title") String title)
 	{
 		return bookService.getBookWrappersByTitle(title);
+	}
+	
+	@PostMapping("/ISBN_NUMBER/{ISBN_NUMBER}")
+	public ResponseEntity<String>returnBookBasedOnISBN_NUMBER(@PathVariable("ISBN_NUMBER") String ISBN_Number)
+	{
+		return bookService.returnBookBasedOnISBN_NUMBER(ISBN_Number);
 	}
 	
 	@PostMapping("/addBook")
@@ -48,6 +54,11 @@ public class BookFetching {
 		bookService.removeBookFromLibrary(id);
 	}
 	
+	@GetMapping("/sampleEndPoint")
+	public ResponseEntity<String>getSuccessMessage()
+	{
+		return new ResponseEntity<>("SUCCESS" , HttpStatus.OK);
+	}
 	
 	
 }
