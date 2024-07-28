@@ -19,7 +19,7 @@ public class Book {
 	private String ISBN_NUMBER;
 	
 	@Column
-	private String Title;
+	private String title;
 	
 	@Column
 	private String author;
@@ -34,7 +34,7 @@ public class Book {
 	public Book(String iSBN_NUMBER, String title, String author, String isIssued) {
 		super();
 		ISBN_NUMBER = iSBN_NUMBER;
-		Title = title;
+		this.title = title;
 		this.author = author;
 		this.isIssued = isIssued;
 	}
@@ -56,11 +56,11 @@ public class Book {
 	}
 
 	public String getTitle() {
-		return Title;
+		return title;
 	}
 
 	public void setTitle(String title) {
-		Title = title;
+		this.title = title;
 	}
 
 	public String getAuthor() {
@@ -81,7 +81,7 @@ public class Book {
 
 	@Override
 	public String toString() {
-		return "Book [id=" + id + ", ISBN_NUMBER=" + ISBN_NUMBER + ", Title=" + Title + ", author=" + author
+		return "Book [id=" + id + ", ISBN_NUMBER=" + ISBN_NUMBER + ", Title=" + title + ", author=" + author
 				+ ", isIssued=" + isIssued + "]";
 	}
 	
